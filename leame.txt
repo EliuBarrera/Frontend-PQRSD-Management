@@ -1,0 +1,50 @@
+0. npx create-react-app mi-proyecto --template typescript
+
+//*********************************************************************
+1. Liberias Proyecto
+//*********************************************************************
+
+npm i react-bootstrap
+npm i swiper
+npm i react-router-dom
+npm i react-redux
+npm i react-datepicker
+npm i react-paginate
+
+npm i @reduxjs/toolkit
+npm i @fortawesome/fontawesome-free
+
+
+npm i sass --save-dev
+npm i sass-loader --save-dev
+npm install @types/node@20 --save-dev
+npm install vite @vitejs/plugin-react --save-dev
+npm install lucide-react
+
+npm i react-datepicker
+
+npm install --save-dev @types/testing-library__react
+
+
+//*********************************************************************
+2.  estrcutura de Proyecto
+//*********************************************************************
+
+mkdir src/app
+mkdir src/app/components
+mkdir src/app/components/contenedor
+mkdir src/app/components/shared
+
+mkdir src/app/services
+mkdir src/app/models
+mkdir src/app/utilities
+
+mkdir src/app/utilities
+mkdir src/app/utilities/domains
+mkdir src/app/utilities/functions
+mkdir src/app/utilities/hocks
+
+mkdir src/app/routes
+mkdir src/app/views
+mkdir src/app/views/private
+mkdir src/app/views/public

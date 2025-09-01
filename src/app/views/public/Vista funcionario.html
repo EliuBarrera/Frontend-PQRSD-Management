@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Funcionario - Sistema PQRSD</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-yellow: #f39200;
+            --primary-blue: #1e2b39;
+            --light-gray: #f8f9fa;
+            --dark-gray: #343a40;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+        }
+        
+        .navbar {
+            background-color: var(--primary-blue);
+        }
+        
+        .navbar-brand, .nav-link {
+            color: white !important;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-yellow);
+            border-color: var(--primary-yellow);
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+        
+        .btn-primary:hover {
+            background-color: #e08400;
+            border-color: #e08400;
+            color: var(--primary-blue);
+        }
+        
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .card-header {
+            background-color: var(--primary-blue);
+            color: white;
+            border-radius: 10px 10px 0 0 !important;
+        }
+        
+        .sidebar {
+            background-color: var(--primary-blue);
+            color: white;
+            height: calc(100vh - 56px);
+            position: sticky;
+            top: 56px;
+            overflow-y: auto;
+        }
+        
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8) !important;
+            padding: 0.8rem 1rem;
+            border-left: 3px solid transparent;
+        }
+        
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white !important;
+            border-left: 3px solid var(--primary-yellow);
+        }
+        
+        .sidebar .nav-link i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .badge-pqrsd-peticion {
+            background-color: #4bc0c0;
+        }
+        
+        .badge-pqrsd-queja {
+            background-color: #ffcd56;
+            color: var(--dark-gray);
+        }
+        
+        .badge-pqrsd-reclamo {
+            background-color: #ff6384;
+        }
+        
+        .badge-pqrsd-solicitud {
+            background-color: #36a2eb;
+        }
+        
+        .badge-pqrsd-denuncia {
+            background-color: #9966ff;
+        }
+        
+        .badge-status-pendiente {
+            background-color: #ffc107;
+            color: var(--dark-gray);
+        }
+        
+        .badge-status-proceso {
+            background-color: #17a2b8;
+        }
+        
+        .badge-status-resuelta {
+            background-color: #28a745;
+        }
+        
+        .badge-status-vencida {
+            background-color: #dc3545;
+        }
+        
+        .badge-priority-alta {
+            background-color: #dc3545;
+        }
+        
+        .badge-priority-media {
+            background-color: #ffc107;
+            color: var(--dark-gray);
+        }
+        
+        .badge-priority-baja {
+            background-color: #17a2b8;
+        }
+        
+        .pqrsd-item {
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+        
+        .pqrsd-item.priority-high {
+            border-left-color: #dc3545;
+        }
+        
+        .pqrsd-item.priority-medium {
+            border-left-color: #ffc107;
+        }
+        
+        .pqrsd-item.priority-low {
+            border-left-color: #17a2b8;
+        }
+        
+        .pqrsd-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .filter-section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .stats-card {
+            border-left: 4px solid var(--primary-yellow);
+            transition: transform 0.2s;
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #dc3545;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .action-btn {
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+        
+        .action-btn:hover {
+            opacity: 1;
+        }
+        
+        .detail-view {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .detail-view.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+            margin: 20px 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #dee2e6;
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -30px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--primary-yellow);
+            border: 2px solid white;
+        }
+        
+        .timeline-date {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+        
+        .tab-content {
+            padding: 20px;
+            background-color: white;
+            border-radius: 0 0 8px 8px;
+        }
+        
+        .nav-tabs .nav-link.active {
+            border-bottom: 3px solid var(--primary-yellow);
+            font-weight: 600;
+        }
+        
+        .user-role-badge {
+            font-size: 0.7rem;
+            padding: 0.25em 0.6em;
+        }
+        
+        .response-section {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .reclassification-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1050;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .reclassification-modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .response-view {
+            background-color: #e9f5e9;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-comments me-2"></i>
+                Sistema PQRSD - IdeaPro
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link position-relative" href="#">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge">3</span>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i> 
+                            <span id="current-user-name">Juan Pérez</span>
+                            <span class="badge bg-light text-dark user-role-badge ms-1" id="current-user-role">Funcionario</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Configuración</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i> Cerrar sesión</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-2 col-md-3 d-md-block sidebar p-0">
+                <div class="d-flex flex-column p-3">
+                    <div class="text-center mb-4">
+                        <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 60px; height: 60px;">
+                            <i class="fas fa-user-tie text-primary" style="font-size: 1.5rem;"></i>
+                        </div>
+                        <h6 class="mb-0">Juan Pérez</h6>
+                        <small class="text-light">Funcionario</small>
+                        <small class="text-light">Secretaría de Gobierno</small>
+                    </div>
+                    
+                    <ul class="nav nav-pills flex-column mb-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-tachometer-alt"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="nav-link active">
+                                <i class="fas fa-list"></i>
+                                Mis PQRSD
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-chart-bar"></i>
+                                Mis Estadísticas
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="nav-link position-relative">
+                                <i class="fas fa-bell"></i>
+                                Alertas
+                                <span class="notification-badge">3</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <hr class="text-light">
+                    <div class="text-center">
+                        <small class="text-light">Sistema de Gestión PQRSD</small><br>
+                        <small class="text-light">v1.0 - IdeaPro</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <main class="col-lg-10 col-md-9 ms-sm-auto px-4 py-3">
+                <!-- Page Title -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="h3 mb-0">Mis PQRSD Asignadas</h2>
+                    <div>
+                        <button class="btn btn-outline-secondary me-2">
+                            <i class="fas fa-download me-1"></i> Exportar
+                        </button>
+                        <button class="btn btn-outline-primary" id="refresh-btn">
+                            <i class="fas fa-sync-alt me-1"></i> Actualizar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stats Cards for Functionary -->
+                <div class="row mb-4">
+                    <div class="col-xl-3 col-md-6 mb-3">
+                        <div class="card stats-card h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h6 class="card-subtitle mb-1 text-muted">Asignadas a mí</h6>
+                                        <h3 class="fw-bold mb-0">18</h3>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-user-check fa-2x text-gray"></i>
+                                    </div>
+                                </div>
+                                <p class="card-text small mt-2"><span class="text-info">Todas mis PQRSD</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 mb-3">
+                        <div class="card stats-card h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h6 class="card-subtitle mb-1 text-muted">Pendientes</h6>
+                                        <h3 class="fw-bold mb-0">7</h3>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-clock fa-2x text-warning"></i>
+                                    </div>
+                                </div>
+                                <p class="card-text small mt-2"><span class="text-danger"><i class="fas fa-exclamation-circle"></i> 2 vencen hoy</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 mb-3">
+                        <div class="card stats-card h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h6 class="card-subtitle mb-1 text-muted">En Proceso</h6>
+                                        <h3 class="fw-bold mb-0">9</h3>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-cogs fa-2x text-info"></i>
+                                    </div>
+                                </div>
+                                <p class="card-text small mt-2"><span class="text-info">50%</span> de mis PQRSD</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 mb-3">
+                        <div class="card stats-card h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h6 class="card-subtitle mb-1 text-muted">Resueltas</h6>
+                                        <h3 class="fw-bold mb-0">2</h3>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <i class="fas fa-check-circle fa-2x text-success"></i>
+                                    </div>
+                                </div>
+                                <p class="card-text small mt-2"><span class="text-success">11%</span> de efectividad</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filter Section -->
+                <div class="filter-section mb-4">
+                    <h4 class="mb-4">Filtros de Búsqueda</h4>
+                    <form id="filter-form">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="searchInput" class="form-label">Palabra clave</label>
+                                <input type="text" class="form-control" id="searchInput" placeholder="Número, asunto, peticionario...">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="statusFilter" class="form-label">Estado</label>
+                                <select class="form-select" id="statusFilter">
+                                    <option value="">Todos</option>
+                                    <option value="pendiente">Pendiente</option>
+                                    <option value="proceso">En proceso</option>
+                                    <option value="resuelta">Resuelta</option>
+                                    <option value="vencida">Vencida</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="typeFilter" class="form-label">Tipo</label>
+                                <select class="form-select" id="typeFilter">
+                                    <option value="">Todos</option>
+                                    <option value="peticion">Petición</option>
+                                    <option value="queja">Queja</option>
+                                    <option value="reclamo">Reclamo</option>
+                                    <option value="solicitud">Solicitud</option>
+                                    <option value="denuncia">Denuncia</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2 mb-3">
+                                <label for="priorityFilter" class="form-label">Prioridad</label>
+                                <select class="form-select" id="priorityFilter">
+                                    <option value="">Todas</option>
+                                    <option value="alta">Alta</option>
+                                    <option value="media">Media</option>
+                                    <option value="baja">Baja</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <button type="reset" class="btn btn-outline-secondary me-2">Limpiar</button>
+                            <button type="submit" class="btn btn-primary">Aplicar Filtros</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- PQRSD List for Functionary -->
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">Mis PQRSD Asignadas</h4>
+                        <div>
+                            <span class="badge bg-light text-dark me-2" id="results-count">18 resultados</span>
+                            <div class="btn-group">
+                                <button class="btn btn-outline-secondary btn-sm">
+                                    <i class="fas fa-table"></i>
+                                </button>
+                                <button class="btn btn-outline-secondary btn-sm">
+                                    <i class="fas fa-th-large"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0" id="pqrsd-table">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th># Radicado</th>
+                                        <th>Tipo</th>
+                                        <th>Peticionario</th>
+                                        <th>Asunto</th>
+                                        <th>Fecha radicación</th>
+                                        <th>Plazo</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="pqrsd-item priority-high" data-pqrsd-id="0842" data-status="vencida">
+                                        <td>PQ-0842</td>
+                                        <td><span class="badge badge-pqrsd-peticion">Petición</span></td>
+                                        <td>Carlos Rodríguez</td>
+                                        <td>Solicitud de información sobre proyectos de infraestructura</td>
+                                        <td>15/08/2023</td>
+                                        <td class="text-danger">25/08/2023 (Vencido)</td>
+                                        <td><span class="badge badge-status-vencida">Vencida</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary action-btn view-pqrsd" title="Ver detalles">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-success action-btn respond-pqrsd" title="Responder">
+                                                <i class="fas fa-reply"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-warning action-btn reclassify-pqrsd" title="Solicitar reclasificación">
+                                                <i class="fas fa-redo"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr class="pqrsd-item priority-medium" data-pqrsd-id="0843" data-status="pendiente">
+                                        <td>PQ-0843</td>
+                                        <td><span class="badge badge-pqrsd-queja">Queja</span></td>
+                                        <td>María González</td>
+                                        <td>Queja por mal estado de vías en el barrio Centro</td>
+                                        <td>16/08/2023</td>
+                                        <td class="text-danger">31/08/2023 (Hoy)</td>
+                                        <td><span class="badge badge-status-pendiente">Pendiente</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary action-btn view-pqrsd" title="Ver detalles">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-success action-btn respond-pqrsd" title="Responder">
+                                                <i class="fas fa-reply"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-warning action-btn reclassify-pqrsd" title="Solicitar reclasificación">
+                                                <i class="fas fa-redo"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr class="pqrsd-item" data-pqrsd-id="0844" data-status="proceso">
+                                        <td>PQ-0844</td>
+                                        <td><span class="badge badge-pqrsd-reclamo">Reclamo</span></td>
+                                        <td>Empresa XYZ SAS</td>
+                                        <td>Reclamo por demora en trámite de licencia</td>
+                                        <td>17/08/2023</td>
+                                        <td>01/09/2023</td>
+                                        <td><span class="badge badge-status-proceso">En proceso</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary action-btn view-pqrsd" title="Ver detalles">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-success action-btn respond-pqrsd" title="Responder">
+                                                <i class="fas fa-reply"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-warning action-btn reclassify-pqrsd" title="Solicitar reclasificación">
+                                                <i class="fas fa-redo"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr class="pqrsd-item" data-pqrsd-id="0845" data-status="resuelta">
+                                        <td>PQ-0845</td>
+                                        <td><span class="badge badge-pqrsd-solicitud">Solicitud</span></td>
+                                        <td>Javier López</td>
+                                        <td>Solicitud de apoyo para evento cultural</td>
+                                        <td>18/08/2023</td>
+                                        <td>02/09/2023</td>
+                                        <td><span class="badge badge-status-resuelta">Resuelta</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary action-btn view-pqrsd" title="Ver detalles">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-info action-btn view-response" title="Ver respuesta">
+                                                <i class="fas fa-file-alt"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr class="pqrsd-item priority-high" data-pqrsd-id="0846" data-status="pendiente">
+                                        <td>PQ-0846</td>
+                                        <td><span class="badge badge-pqrsd-denuncia">Denuncia</span></td>
+                                        <td>Ana Martínez</td>
+                                        <td>Denuncia por presunta irregularidad en contratación</td>
+                                        <td>19/08/2023</td>
+                                        <td>03/09/2023</td>
+                                        <td><span class="badge badge-status-pendiente">Pendiente</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary action-btn view-pqrsd" title="Ver detalles">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-success action-btn respond-pqrsd" title="Responder">
+                                                <i class="fas fa-reply"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-warning action-btn reclassify-pqrsd" title="Solicitar reclasificación">
+                                                <i class="fas fa-redo"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-center mb-0">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#">Anterior</a>
+                                </li>
+                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">Siguiente</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+
+                <!-- PQRSD Detail View -->
+                <div class="card detail-view" id="pqrsdDetail">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">Detalle de PQRSD #<span id="detail-id">0842</span></h4>
+                        <button class="btn btn-sm btn-outline-secondary" id="closeDetail">
+                            <i class="fas fa-times"></i> Cerrar
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <ul class="nav nav-tabs" id="pqrsdTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="info-tab" data-bs-toggle="tab" data-bs-target="#info" type="button" role="tab">Información</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="history-tab" data-bs-toggle="tab" data-bs-target="#history" type="button" role="tab">Historial</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="response-tab" data-bs-toggle="tab" data-bs-target="#response" type="button" role="tab">Responder</button>
+                            </li>
+                        </ul>
+                        
+                        <div class="tab-content" id="pqrsdTabContent">
+                            <!-- Information Tab -->
+                            <div class="tab-pane fade show active" id="info" role="tabpanel">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h5 class="mb-3">Información General</h5>
+                                        <table class="table table-borderless">
+                                            <tr>
+                                                <th width="40%">Número de radicado:</th>
+                                                <td>PQ-0842</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Tipo de PQRSD:</th>
+                                                <td><span class="badge badge-pqrsd-peticion">Petición</span></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Fecha de radicación:</th>
+                                                <td>15/08/2023 10:23 AM</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Plazo de respuesta:</th>
+                                                <td class="text-danger">25/08/2023 (Vencido)</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Estado actual:</th>
+                                                <td><span class="badge badge-status-vencida">Vencida</span></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Prioridad:</th>
+                                                <td><span class="badge badge-priority-alta">Alta</span></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Canal de recepción:</th>
+                                                <td>Página Web</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h5 class="mb-3">Información del Peticionario</h5>
+                                        <table class="table table-borderless">
+                                            <tr>
+                                                <th width="40%">Nombre:</th>
+                                                <td>Carlos Rodríguez</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Tipo de peticionario:</th>
+                                                <td>Persona Natural</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Tipo de identificación:</th>
+                                                <td>Cédula de Ciudadanía</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Número de identificación:</th>
+                                                <td>12.345.678</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Correo electrónico:</th>
+                                                <td>carlos.rodriguez@email.com</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Teléfono:</th>
+                                                <td>300 123 4567</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Dirección:</th>
+                                                <td>Calle 123 #45-67, Barrio Centro</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                                
+                                <div class="row mt-4">
+                                    <div class="col-12">
+                                        <h5 class="mb-3">Contenido de la PQRSD</h5>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h6 class="card-title">Asunto: Solicitud de información sobre proyectos de infraestructura</h6>
+                                                <p class="card-text">
+                                                    Me dirijo a ustedes para solicitar información detallada sobre los proyectos de infraestructura 
+                                                    programados para el próximo año en el municipio. Específicamente, necesito conocer:
+                                                </p>
+                                                <ul>
+                                                    <li>Proyectos de pavimentación de vías terciarias</li>
+                                                    <li>Plan de mantenimiento de puentes vehiculares</li>
+                                                    <li>Programación de obras de alcantarillado</li>
+                                                    <li>Presupuesto asignado para cada proyecto</li>
+                                                </ul>
+                                                <p class="card-text">
+                                                    Esta información es de vital importancia para una investigación que estoy realizando sobre 
+                                                    el desarrollo de infraestructura en la región. Agradezco su pronta respuesta.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row mt-4">
+                                    <div class="col-md-6">
+                                        <h5 class="mb-3">Asignación Actual</h5>
+                                        <table class="table table-borderless">
+                                            <tr>
+                                                <th width="40%">Dependencia:</th>
+                                                <td>Secretaría de Gobierno</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Funcionario responsable:</th>
+                                                <td>Juan Pérez</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Fecha de asignación:</th>
+                                                <td>16/08/2023</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Última actualización:</th>
+                                                <td>20/08/2023</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h5 class="mb-3">Archivos Adjuntos</h5>
+                                        <div class="list-group">
+                                            <a href="#" class="list-group-item list-group-item-action">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <i class="fas fa-file-pdf text-danger me-2"></i>
+                                                        documento_soporte.pdf
+                                                    </div>
+                                                    <small class="text-muted">2.3 MB</small>
+                                                </div>
+                                            </a>
+                                            <a href="#" class="list-group-item list-group-item-action">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <i class="fas fa-file-image text-primary me-2"></i>
+                                                        imagen_evidencia.jpg
+                                                    </div>
+                                                    <small class="text-muted">1.5 MB</small>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- History Tab -->
+                            <div class="tab-pane fade" id="history" role="tabpanel">
+                                <h5 class="mb-4">Historial de Movimientos</h5>
+                                
+                                <div class="timeline">
+                                    <div class="timeline-item">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between">
+                                                    <h6 class="card-title">PQRSD Radicada</h6>
+                                                    <span class="timeline-date">15/08/2023 10:23 AM</span>
+                                                </div>
+                                                <p class="card-text mb-1">Por: Sistema automático</p>
+                                                <p class="card-text">La PQRSD fue radicada exitosamente con el número PQ-0842</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="timeline-item">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between">
+                                                    <h6 class="card-title">Asignación Inicial</h6>
+                                                    <span class="timeline-date">16/08/2023 09:15 AM</span>
+                                                </div>
+                                                <p class="card-text mb-1">Por: Admin User</p>
+                                                <p class="card-text">La PQRSD fue asignada a la Secretaría de Gobierno</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="timeline-item">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between">
+                                                    <h6 class="card-title">Cambio de Estado</h6>
+                                                    <span class="timeline-date">16/08/2023 11:40 AM</span>
+                                                </div>
+                                                <p class="card-text mb-1">Por: Juan Pérez (Secretaría de Gobierno)</p>
+                                                <p class="card-text">Estado cambiado a "En proceso"</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="timeline-item">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between">
+                                                    <h6 class="card-title">Solicitud de Información Adicional</h6>
+                                                    <span class="timeline-date">20/08/2023 03:20 PM</span>
+                                                </div>
+                                                <p class="card-text mb-1">Por: Juan Pérez (Secretaría de Gobierno)</p>
+                                                <p class="card-text">Se solicitó información adicional a otras dependencias para dar respuesta completa</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="timeline-item">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between">
+                                                    <h6 class="card-title">Vencimiento de Plazo</h6>
+                                                    <span class="timeline-date">25/08/2023 11:59 PM</span>
+                                                </div>
+                                                <p class="card-text mb-1">Por: Sistema automático</p>
+                                                <p class="card-text">La PQRSD ha superado el plazo establecido para respuesta</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Response Tab -->
+                            <div class="tab-pane fade" id="response" role="tabpanel">
+                                <h5 class="mb-4">Responder PQRSD</h5>
+                                
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    Esta PQRSD está <strong>vencida</strong>. Por favor, priorice su respuesta y notifique al administrador.
+                                </div>
+                                
+                                <form id="responseForm">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="responseType" class="form-label">Tipo de Respuesta</label>
+                                            <select class="form-select" id="responseType" required>
+                                                <option value="">Seleccione el tipo de respuesta</option>
+                                                <option value="email">Correo Electrónico</option>
+                                                <option value="physical">Carta Física</option>
+                                                <option value="phone">Llamada Telefónica</option>
+                                                <option value="other">Otro</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="responseStatus" class="form-label">Estado después de responder</label>
+                                            <select class="form-select" id="responseStatus" required>
+                                                <option value="resuelta">Resuelta</option>
+                                                <option value="proceso">En proceso (requiere seguimiento)</option>
+                                                <option value="pendiente">Pendiente (esperando información)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="responseSubject" class="form-label">Asunto de la respuesta</label>
+                                        <input type="text" class="form-control" id="responseSubject" value="Respuesta a solicitud de información sobre proyectos de infraestructura" required>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="responseContent" class="form-label">Contenido de la Respuesta</label>
+                                        <textarea class="form-control" id="responseContent" rows="8" required>
+Estimado(a) Carlos Rodríguez,
+
+Agradecemos su comunicación mediante la cual solicita información sobre los proyectos de infraestructura programados para el próximo año.
+
+En respuesta a su solicitud, nos complace informarle que:
+
+1. Proyectos de pavimentación de vías terciarias:
+   - Corregimiento La Esperanza: 5.2 km
+   - Vereda San José: 3.8 km
+   - Vereda El Progreso: 4.5 km
+
+2. Plan de mantenimiento de puentes vehiculares:
+   - Puente sobre quebrada La Virgen: Reparación de estructura
+   - Puente central: Refuerzo de bases y pavimentación
+   - Puente vehicular sector industrial: Mantenimiento preventivo
+
+3. Programación de obras de alcantarillado:
+   - Barrio Centro: Enero-Marzo 2024
+   - Barrio Norte: Abril-Junio 2024
+   - Barrio Sur: Julio-Septiembre 2024
+
+4. Presupuesto asignado para cada proyecto:
+   - Pavimentación: $2.500 millones
+   - Mantenimiento de puentes: $800 millones
+   - Alcantarillado: $3.200 millones
+
+Para información más detallada, puede contactarnos directamente en la Secretaría de Gobierno.
+
+Cordialmente,
+Juan Pérez
+Secretaría de Gobierno
+                                        </textarea>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="responseFile" class="form-label">Archivos Adjuntos</label>
+                                        <input class="form-control" type="file" id="responseFile" multiple>
+                                        <div class="form-text">Puede adjuntar hasta 5 archivos (PDF, JPG, PNG). Tamaño máximo por archivo: 5MB</div>
+                                    </div>
+                                    
+                                    <div class="mb-3 form-check">
+                                        <input type="checkbox" class="form-check-input" id="notifyUser" checked>
+                                        <label class="form-check-label" for="notifyUser">Notificar al usuario por correo electrónico</label>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-end">
+                                        <button type="button" class="btn btn-outline-secondary me-2" id="saveDraft">Guardar borrador</button>
+                                        <button type="submit" class="btn btn-success">
+                                            <i class="fas fa-paper-plane me-1"></i> Enviar Respuesta
+                                        </button>
+                                    </div>
+                                </form>
+                                
+                                <div class="response-section mt-4">
+                                    <h6 class="mb-3">Plantillas de Respuesta Rápida</h6>
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <button class="btn btn-outline-primary btn-sm template-btn" data-template="additional-info">Solicitud de información adicional</button>
+                                        <button class="btn btn-outline-primary btn-sm template-btn" data-template="standard">Respuesta estándar</button>
+                                        <button class="btn btn-outline-primary btn-sm template-btn" data-template="extension">Notificación de prórroga</button>
+                                        <button class="btn btn-outline-primary btn-sm template-btn" data-template="documents">Solicitud de documentos</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Response View -->
+                <div class="card detail-view" id="responseView">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">Respuesta a PQRSD #<span id="response-id">0845</span></h4>
+                        <button class="btn btn-sm btn-outline-secondary" id="closeResponseView">
+                            <i class="fas fa-times"></i> Cerrar
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle me-2"></i>
+                            Esta PQRSD ha sido <strong>resuelta</strong> exitosamente.
+                        </div>
+                        
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <h5>Información de la Respuesta</h5>
+                                <table class="table table-borderless">
+                                    <tr>
+                                        <th width="40%">Fecha de respuesta:</th>
+                                        <td>25/08/2023 14:30 PM</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Respondido por:</th>
+                                        <td>Juan Pérez</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Dependencia:</th>
+                                        <td>Secretaría de Cultura</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Método de envío:</th>
+                                        <td>Correo Electrónico</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Estado resultante:</th>
+                                        <td><span class="badge badge-status-resuelta">Resuelta</span></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>Archivos Adjuntos</h5>
+                                <div class="list-group">
+                                    <a href="#" class="list-group-item list-group-item-action">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <i class="fas fa-file-pdf text-danger me-2"></i>
+                                                respuesta_oficial.pdf
+                                            </div>
+                                            <small class="text-muted">1.2 MB</small>
+                                        </div>
+                                    </a>
+                                    <a href="#" class="list-group-item list-group-item-action">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <i class="fas fa-file-word text-primary me-2"></i>
+                                                informacion_adicional.docx
+                                            </div>
+                                            <small class="text-muted">0.8 MB</small>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="response-view">
+                            <h5 class="mb-3">Contenido de la Respuesta</h5>
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6 class="card-title">Asunto: Respuesta a solicitud de apoyo para evento cultural</h6>
+                                    <p class="card-text">
+                                        Estimado(a) Javier López,
+                                    </p>
+                                    <p class="card-text">
+                                        Agradecemos su interés en realizar un evento cultural en nuestro municipio y nos complace informarle que su solicitud de apoyo ha sido aprobada.
+                                    </p>
+                                    <p class="card-text">
+                                        De acuerdo con su solicitud, la Secretaría de Cultura le brindará el siguiente apoyo:
+                                    </p>
+                                    <ul>
+                                        <li>Espacio en el Centro Cultural Municipal para los días 15 y 16 de septiembre</li>
+                                        <li>Apoyo logístico con sonido e iluminación básica</li>
+                                        <li>Difusión del evento a través de nuestros canales oficiales</li>
+                                        <li>Asesoría técnica para la producción del evento</li>
+                                    </ul>
+                                    <p class="card-text">
+                                        Para coordinar los detalles específicos, le solicitamos ponerse en contacto con nuestra área de eventos al correo eventos@cultura.gov.co o al teléfono 321 456 7890.
+                                    </p>
+                                    <p class="card-text">
+                                        Agradecemos su contribución al enriquecimiento cultural de nuestro municipio y esperamos que el evento sea todo un éxito.
+                                    </p>
+                                    <p class="card-text">
+                                        Cordialmente,<br>
+                                        María González<br>
+                                        Coordinadora de Eventos Culturales<br>
+                                        Secretaría de Cultura
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <button class="btn btn-outline-primary">
+                                <i class="fas fa-download me-1"></i> Descargar respuesta en PDF
+                            </button>
+                            <button class="btn btn-outline-secondary ms-2">
+                                <i class="fas fa-print me-1"></i> Imprimir respuesta
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Reclassification Modal -->
+    <div class="reclassification-modal" id="reclassificationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Solicitar Reclasificación de PQRSD #<span id="modal-pqrsd-id">0842</span></h5>
+                <button type="button" class="btn-close" id="closeModal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    Esta acción solicitará la reclasificación de la PQRSD a otra dependencia.
+                </div>
+                
+                <form id="reclassificationForm">
+                    <div class="mb-3">
+                        <label for="currentDepartment" class="form-label">Dependencia Actual</label>
+                        <input type="text" class="form-control" id="currentDepartment" value="Secretaría de Gobierno" disabled>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="newDepartment" class="form-label">Nueva Dependencia *</label>
+                        <select class="form-select" id="newDepartment" required>
+                            <option value="">Seleccione una dependencia</option>
+                            <option value="planeacion">Secretaría de Planeación</option>
+                            <option value="obras">Secretaría de Obras Públicas</option>
+                            <option value="hacienda">Secretaría de Hacienda</option>
+                            <option value="cultura">Secretaría de Cultura y Deporte</option>
+                            <option value="alcaldia">Despacho del Alcalde</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="reclassificationReason" class="form-label">Motivo de la Reclasificación *</label>
+                        <textarea class="form-control" id="reclassificationReason" rows="4" placeholder="Explique detalladamente por qué esta PQRSD debe ser reclasificada a otra dependencia..." required></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="reclassificationComments" class="form-label">Comentarios Adicionales (Opcional)</label>
+                        <textarea class="form-control" id="reclassificationComments" rows="2" placeholder="Agregue cualquier comentario adicional que considere relevante..."></textarea>
+                    </div>
+                    
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="btn btn-outline-secondary me-2" id="cancelReclassification">Cancelar</button>
+                        <button type="submit" class="btn btn-warning">
+                            <i class="fas fa-paper-plane me-1"></i> Enviar Solicitud
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Variables globales
+            let currentPqrsdId = null;
+            
+            // View PQRSD details
+            document.querySelectorAll('.view-pqrsd').forEach(button => {
+                button.addEventListener('click', function() {
+                    currentPqrsdId = this.closest('tr').getAttribute('data-pqrsd-id');
+                    document.getElementById('detail-id').textContent = currentPqrsdId;
+                    document.getElementById('pqrsdDetail').classList.add('active');
+                    
+                    // Scroll to detail view
+                    document.getElementById('pqrsdDetail').scrollIntoView({ behavior: 'smooth' });
+                });
+            });
+            
+            // Close detail view
+            document.getElementById('closeDetail').addEventListener('click', function() {
+                document.getElementById('pqrsdDetail').classList.remove('active');
+            });
+            
+            // Respond to PQRSD
+            document.querySelectorAll('.respond-pqrsd').forEach(button => {
+                button.addEventListener('click', function() {
+                    currentPqrsdId = this.closest('tr').getAttribute('data-pqrsd-id');
+                    document.getElementById('detail-id').textContent = currentPqrsdId;
+                    document.getElementById('pqrsdDetail').classList.add('active');
+                    
+                    // Activate the response tab
+                    document.querySelectorAll('.nav-link').forEach(link => {
+                        link.classList.remove('active');
+                    });
+                    document.getElementById('response-tab').classList.add('active');
+                    
+                    document.querySelectorAll('.tab-pane').forEach(pane => {
+                        pane.classList.remove('show', 'active');
+                    });
+                    document.getElementById('response').classList.add('show', 'active');
+                    
+                    // Scroll to detail view
+                    document.getElementById('pqrsdDetail').scrollIntoView({ behavior: 'smooth' });
+                });
+            });
+            
+            // Request reclassification
+            document.querySelectorAll('.reclassify-pqrsd').forEach(button => {
+                button.addEventListener('click', function() {
+                    currentPqrsdId = this.closest('tr').getAttribute('data-pqrsd-id');
+                    document.getElementById('modal-pqrsd-id').textContent = currentPqrsdId;
+                    document.getElementById('reclassificationModal').classList.add('active');
+                });
+            });
+            
+            // View response
+            document.querySelectorAll('.view-response').forEach(button => {
+                button.addEventListener('click', function() {
+                    const pqrsdId = this.closest('tr').getAttribute('data-pqrsd-id');
+                    document.getElementById('response-id').textContent = pqrsdId;
+                    document.getElementById('responseView').classList.add('active');
+                    
+                    // Scroll to response view
+                    document.getElementById('responseView').scrollIntoView({ behavior: 'smooth' });
+                });
+            });
+            
+            // Close response view
+            document.getElementById('closeResponseView').addEventListener('click', function() {
+                document.getElementById('responseView').classList.remove('active');
+            });
+            
+            // Close modal
+            document.getElementById('closeModal').addEventListener('click', function() {
+                document.getElementById('reclassificationModal').classList.remove('active');
+            });
+            
+            // Cancel reclassification
+            document.getElementById('cancelReclassification').addEventListener('click', function() {
+                document.getElementById('reclassificationModal').classList.remove('active');
+            });
+            
+            // Response form submission
+            document.getElementById('responseForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Simulate form submission
+                const submitBtn = this.querySelector('button[type="submit"]');
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Enviando...';
+                submitBtn.disabled = true;
+                
+                setTimeout(function() {
+                    alert('¡Respuesta enviada exitosamente! La PQRSD ha sido marcada como resuelta.');
+                    
+                    // Update the UI
+                    const row = document.querySelector(`tr[data-pqrsd-id="${currentPqrsdId}"]`);
+                    if (row) {
+                        row.querySelector('td:nth-child(7)').innerHTML = '<span class="badge badge-status-resuelta">Resuelta</span>';
+                        const actionsCell = row.querySelector('td:nth-child(8)');
+                        actionsCell.innerHTML = `
+                            <button class="btn btn-sm btn-outline-primary action-btn view-pqrsd" title="Ver detalles">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-info action-btn view-response" title="Ver respuesta">
+                                <i class="fas fa-file-alt"></i>
+                            </button>
+                        `;
+                        
+                        // Reattach event listeners
+                        actionsCell.querySelector('.view-pqrsd').addEventListener('click', function() {
+                            currentPqrsdId = this.closest('tr').getAttribute('data-pqrsd-id');
+                            document.getElementById('detail-id').textContent = currentPqrsdId;
+                            document.getElementById('pqrsdDetail').classList.add('active');
+                            document.getElementById('pqrsdDetail').scrollIntoView({ behavior: 'smooth' });
+                        });
+                        
+                        actionsCell.querySelector('.view-response').addEventListener('click', function() {
+                            const pqrsdId = this.closest('tr').getAttribute('data-pqrsd-id');
+                            document.getElementById('response-id').textContent = pqrsdId;
+                            document.getElementById('responseView').classList.add('active');
+                            document.getElementById('responseView').scrollIntoView({ behavior: 'smooth' });
+                        });
+                    }
+                    
+                    // Close the detail view
+                    document.getElementById('pqrsdDetail').classList.remove('active');
+                    
+                    // Reset form
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane me-1"></i> Enviar Respuesta';
+                    submitBtn.disabled = false;
+                }, 2000);
+            });
+            
+            // Reclassification form submission
+            document.getElementById('reclassificationForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Simulate form submission
+                const submitBtn = this.querySelector('button[type="submit"]');
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Enviando...';
+                submitBtn.disabled = true;
+                
+                setTimeout(function() {
+                    alert('¡Solicitud de reclasificación enviada exitosamente! El administrador revisará su solicitud.');
+                    document.getElementById('reclassificationModal').classList.remove('active');
+                    
+                    // Reset form
+                    document.getElementById('reclassificationForm').reset();
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane me-1"></i> Enviar Solicitud';
+                    submitBtn.disabled = false;
+                }, 2000);
+            });
+            
+            // Save draft
+            document.getElementById('saveDraft').addEventListener('click', function() {
+                alert('Borrador guardado exitosamente. Puede continuar más tarde.');
+            });
+            
+            // Template buttons
+            document.querySelectorAll('.template-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const templateType = this.getAttribute('data-template');
+                    let templateText = '';
+                    
+                    switch(templateType) {
+                        case 'additional-info':
+                            templateText = 'Para poder procesar su solicitud, necesitamos información adicional. Por favor, proporcione los siguientes detalles: [detalles específicos requeridos]. Agradecemos su colaboración.';
+                            break;
+                        case 'standard':
+                            templateText = 'Agradecemos su comunicación. Hemos recibido su solicitud y la estamos procesando. Nos estaremos comunicando con usted en caso de necesitar información adicional.';
+                            break;
+                        case 'extension':
+                            templateText = 'Debido a la complejidad de su solicitud, necesitamos prorrogar el plazo de respuesta. Le informaremos tan pronto como tengamos una respuesta completa.';
+                            break;
+                        case 'documents':
+                            templateText = 'Para procesar su solicitud, necesitamos los siguientes documentos: [lista de documentos]. Por favor, adjúntelos en respuesta a este mensaje.';
+                            break;
+                    }
+                    
+                    document.getElementById('responseContent').value = templateText;
+                });
+            });
+            
+            // Filter form submission
+            document.getElementById('filter-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const statusFilter = document.getElementById('statusFilter').value;
+                const typeFilter = document.getElementById('typeFilter').value;
+                const priorityFilter = document.getElementById('priorityFilter').value;
+                const searchText = document.getElementById('searchInput').value.toLowerCase();
+                
+                let visibleCount = 0;
+                
+                document.querySelectorAll('#pqrsd-table tbody tr').forEach(row => {
+                    const status = row.getAttribute('data-status');
+                    const type = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                    const priority = row.classList.contains('priority-high') ? 'alta' : 
+                                    row.classList.contains('priority-medium') ? 'media' : 'baja';
+                    const rowText = row.textContent.toLowerCase();
+                    
+                    const statusMatch = !statusFilter || status === statusFilter;
+                    const typeMatch = !typeFilter || type.includes(typeFilter);
+                    const priorityMatch = !priorityFilter || priority === priorityFilter;
+                    const searchMatch = !searchText || rowText.includes(searchText);
+                    
+                    if (statusMatch && typeMatch && priorityMatch && searchMatch) {
+                        row.style.display = '';
+                        visibleCount++;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+                
+                document.getElementById('results-count').textContent = `${visibleCount} resultados`;
+            });
+            
+            // Refresh button
+            document.getElementById('refresh-btn').addEventListener('click', function() {
+                this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Actualizando...';
+                
+                setTimeout(() => {
+                    this.innerHTML = '<i class="fas fa-sync-alt me-1"></i> Actualizar';
+                    alert('Datos actualizados correctamente.');
+                }, 1500);
+            });
+        });
+    </script>
+</body>
+</html>

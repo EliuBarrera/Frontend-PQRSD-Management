@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar PQRSD - Sistema de Gestión</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-yellow: #f39200;
+            --primary-blue: #1e2b39;
+            --light-gray: #f8f9fa;
+            --dark-gray: #343a40;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+        }
+        
+        .navbar {
+            background-color: var(--primary-blue);
+        }
+        
+        .navbar-brand, .nav-link {
+            color: white !important;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-yellow);
+            border-color: var(--primary-yellow);
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+        
+        .btn-primary:hover {
+            background-color: #e08400;
+            border-color: #e08400;
+            color: var(--primary-blue);
+        }
+        
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .card-header {
+            background-color: var(--primary-blue);
+            color: white;
+            border-radius: 10px 10px 0 0 !important;
+        }
+        
+        .step-progress {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .step-progress::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: #dee2e6;
+            z-index: 1;
+        }
+        
+        .step {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            width: 100%;
+        }
+        
+        .step-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #dee2e6;
+            color: #6c757d;
+            font-weight: bold;
+            margin: 0 auto 10px;
+        }
+        
+        .step.active .step-number {
+            background-color: var(--primary-yellow);
+            color: white;
+        }
+        
+        .step.completed .step-number {
+            background-color: var(--primary-blue);
+            color: white;
+        }
+        
+        .step-label {
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+        
+        .step.active .step-label {
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+        
+        .form-section {
+            display: none;
+        }
+        
+        .form-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .form-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .required-field::after {
+            content: '*';
+            color: #dc3545;
+            margin-left: 4px;
+        }
+        
+        .channel-option {
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        
+        .channel-option:hover {
+            border-color: var(--primary-yellow);
+            transform: translateY(-5px);
+        }
+        
+        .channel-option.selected {
+            border-color: var(--primary-yellow);
+            background-color: rgba(243, 146, 0, 0.05);
+        }
+        
+        .channel-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--primary-blue);
+        }
+        
+        .privacy-notice {
+            background-color: #f8f9fa;
+            border-left: 4px solid var(--primary-blue);
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+        
+        .character-count {
+            font-size: 0.8rem;
+            color: #6c757d;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-comments me-2"></i>
+                Sistema PQRSD - IdeaPro
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="#"><i class="fas fa-home me-1"></i> Inicio</a>
+                <a class="nav-link" href="#"><i class="fas fa-question-circle me-1"></i> Ayuda</a>
+                <a class="nav-link" href="#"><i class="fas fa-user me-1"></i> Mi Cuenta</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="mb-0">Registrar Nueva PQRSD</h3>
+                        <p class="mb-0">Complete la siguiente información para registrar su petición, queja, reclamo, solicitud o denuncia</p>
+                    </div>
+                    <div class="card-body">
+                        <!-- Progress Steps -->
+                        <div class="step-progress">
+                            <div class="step active" id="step1">
+                                <div class="step-number">1</div>
+                                <div class="step-label">Tipo de PQRSD</div>
+                            </div>
+                            <div class="step" id="step2">
+                                <div class="step-number">2</div>
+                                <div class="step-label">Información Personal</div>
+                            </div>
+                            <div class="step" id="step3">
+                                <div class="step-number">3</div>
+                                <div class="step-label">Detalles</div>
+                            </div>
+                            <div class="step" id="step4">
+                                <div class="step-number">4</div>
+                                <div class="step-label">Revisión</div>
+                            </div>
+                        </div>
+
+                        <!-- Form Sections -->
+                        <form id="pqrsdForm">
+                            <!-- Step 1: PQRSD Type -->
+                            <div class="form-section active" id="section1">
+                                <h4 class="mb-4">Seleccione el tipo de PQRSD</h4>
+                                
+                                <div class="row mb-4">
+                                    <div class="col-md-4 mb-3">
+                                        <div class="channel-option" data-type="peticion">
+                                            <div class="channel-icon">
+                                                <i class="fas fa-envelope-open-text"></i>
+                                            </div>
+                                            <h5>Petición</h5>
+                                            <p class="small">Solicitud de información general o documentos</p>
+                                            <div class="text-primary small">Plazo: 15 días</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <div class="channel-option" data-type="queja">
+                                            <div class="channel-icon">
+                                                <i class="fas fa-exclamation-triangle"></i>
+                                            </div>
+                                            <h5>Queja</h5>
+                                            <p class="small">Manifestación de inconformidad con servicio o funcionario</p>
+                                            <div class="text-primary small">Plazo: 15 días</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <div class="channel-option" data-type="reclamo">
+                                            <div class="channel-icon">
+                                                <i class="fas fa-times-circle"></i>
+                                            </div>
+                                            <h5>Reclamo</h5>
+                                            <p class="small">Solicitud para resolver situación particular</p>
+                                            <div class="text-primary small">Plazo: 15 días</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <div class="channel-option" data-type="solicitud">
+                                            <div class="channel-icon">
+                                                <i class="fas fa-hands-helping"></i>
+                                            </div>
+                                            <h5>Solicitud</h5>
+                                            <p class="small">Petición de servicios o apoyo específico</p>
+                                            <div class="text-primary small">Plazo: varía</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <div class="channel-option" data-type="denuncia">
+                                            <div class="channel-icon">
+                                                <i class="fas fa-gavel"></i>
+                                            </div>
+                                            <h5>Denuncia</h5>
+                                            <p class="small">Reporte de presuntas irregularidades o conductas</p>
+                                            <div class="text-primary small">Plazo: 15 días</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <div class="channel-option" data-type="otro">
+                                            <div class="channel-icon">
+                                                <i class="fas fa-question-circle"></i>
+                                            </div>
+                                            <h5>Otro</h5>
+                                            <p class="small">Otra modalidad no clasificada anteriormente</p>
+                                            <div class="text-primary small">Plazo: por definir</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <input type="hidden" id="pqrsdType" name="pqrsdType" required>
+                                
+                                <div class="form-navigation">
+                                    <button type="button" class="btn btn-outline-secondary" disabled>Anterior</button>
+                                    <button type="button" class="btn btn-primary next-btn">Siguiente</button>
+                                </div>
+                            </div>
+
+                            <!-- Step 2: Personal Information -->
+                            <div class="form-section" id="section2">
+                                <h4 class="mb-4">Información del Peticionario</h4>
+                                
+                                <div class="row mb-4">
+                                    <div class="col-md-6">
+                                        <h5 class="mb-3">Tipo de Peticionario</h5>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="radio" name="petitionerType" id="naturalPerson" value="natural" checked>
+                                            <label class="form-check-label" for="naturalPerson">
+                                                Persona Natural
+                                            </label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="radio" name="petitionerType" id="legalPerson" value="legal">
+                                            <label class="form-check-label" for="legalPerson">
+                                                Persona Jurídica
+                                            </label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="radio" name="petitionerType" id="publicAuthority" value="authority">
+                                            <label class="form-check-label" for="publicAuthority">
+                                                Autoridad Pública
+                                            </label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="radio" name="petitionerType" id="journalist" value="journalist">
+                                            <label class="form-check-label" for="journalist">
+                                                Periodista
+                                            </label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="radio" name="petitionerType" id="councilor" value="councilor">
+                                            <label class="form-check-label" for="councilor">
+                                                Concejal
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <h5 class="mb-3">Canal de Recepción</h5>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="radio" name="receptionChannel" id="webChannel" value="web" checked>
+                                            <label class="form-check-label" for="webChannel">
+                                                Página Web
+                                            </label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="radio" name="receptionChannel" id="emailChannel" value="email">
+                                            <label class="form-check-label" for="emailChannel">
+                                                Correo Electrónico
+                                            </label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="radio" name="receptionChannel" id="whatsappChannel" value="whatsapp">
+                                            <label class="form-check-label" for="whatsappChannel">
+                                                WhatsApp
+                                            </label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="radio" name="receptionChannel" id="phoneChannel" value="phone">
+                                            <label class="form-check-label" for="phoneChannel">
+                                                Teléfono
+                                            </label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="radio" name="receptionChannel" id="presentialChannel" value="presential">
+                                            <label class="form-check-label" for="presentialChannel">
+                                                Presencial
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row" id="naturalPersonFields">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="firstName" class="form-label required-field">Nombres</label>
+                                        <input type="text" class="form-control" id="firstName" name="firstName" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="lastName" class="form-label required-field">Apellidos</label>
+                                        <input type="text" class="form-control" id="lastName" name="lastName" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="idType" class="form-label required-field">Tipo de Identificación</label>
+                                        <select class="form-select" id="idType" name="idType" required>
+                                            <option value="">Seleccione...</option>
+                                            <option value="cc">Cédula de Ciudadanía</option>
+                                            <option value="ce">Cédula de Extranjería</option>
+                                            <option value="ti">Tarjeta de Identidad</option>
+                                            <option value="pp">Pasaporte</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="idNumber" class="form-label required-field">Número de Identificación</label>
+                                        <input type="text" class="form-control" id="idNumber" name="idNumber" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="email" class="form-label required-field">Correo Electrónico</label>
+                                        <input type="email" class="form-control" id="email" name="email" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="phone" class="form-label required-field">Teléfono</label>
+                                        <input type="tel" class="form-control" id="phone" name="phone" required>
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <label for="address" class="form-label">Dirección</label>
+                                        <input type="text" class="form-control" id="address" name="address">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-navigation">
+                                    <button type="button" class="btn btn-outline-secondary prev-btn">Anterior</button>
+                                    <button type="button" class="btn btn-primary next-btn">Siguiente</button>
+                                </div>
+                            </div>
+
+                            <!-- Step 3: PQRSD Details -->
+                            <div class="form-section" id="section3">
+                                <h4 class="mb-4">Detalles de la PQRSD</h4>
+                                
+                                <div class="mb-3">
+                                    <label for="subject" class="form-label required-field">Asunto</label>
+                                    <input type="text" class="form-control" id="subject" name="subject" required>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="description" class="form-label required-field">Descripción Detallada</label>
+                                    <textarea class="form-control" id="description" name="description" rows="6" required></textarea>
+                                    <div class="character-count">0/2000 caracteres</div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="department" class="form-label">Dependencia Destino (Opcional)</label>
+                                    <select class="form-select" id="department" name="department">
+                                        <option value="">Seleccione una dependencia (opcional)</option>
+                                        <option value="alcaldia">Despacho del Alcalde</option>
+                                        <option value="planeacion">Secretaría de Planeación</option>
+                                        <option value="obras">Secretaría de Obras Públicas</option>
+                                        <option value="gobierno">Secretaría de Gobierno</option>
+                                        <option value="hacienda">Secretaría de Hacienda</option>
+                                        <option value="cultura">Secretaría de Cultura y Deporte</option>
+                                    </select>
+                                    <div class="form-text">Si conoce la dependencia que debe resolver su solicitud, selecciónela</div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="attachments" class="form-label">Archivos Adjuntos</label>
+                                    <input class="form-control" type="file" id="attachments" name="attachments" multiple>
+                                    <div class="form-text">Puede adjuntar hasta 5 archivos (PDF, JPG, PNG). Tamaño máximo por archivo: 5MB</div>
+                                </div>
+                                
+                                <div class="privacy-notice">
+                                    <h6><i class="fas fa-shield-alt me-2"></i>Protección de Datos Personales</h6>
+                                    <p class="small mb-0">De acuerdo con la Ley 1581 de 2012, sus datos personales serán tratados de forma confidencial y solo serán utilizados para el procesamiento de su PQRSD. Al enviar este formulario, acepta nuestra política de tratamiento de datos.</p>
+                                </div>
+                                
+                                <div class="form-navigation">
+                                    <button type="button" class="btn btn-outline-secondary prev-btn">Anterior</button>
+                                    <button type="button" class="btn btn-primary next-btn">Siguiente</button>
+                                </div>
+                            </div>
+
+                            <!-- Step 4: Review and Submit -->
+                            <div class="form-section" id="section4">
+                                <h4 class="mb-4">Revise su Solicitud</h4>
+                                
+                                <div class="card mb-4">
+                                    <div class="card-header bg-light">
+                                        <h5 class="mb-0">Resumen de la PQRSD</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <p><strong>Tipo de PQRSD:</strong> <span id="review-type">No seleccionado</span></p>
+                                                <p><strong>Asunto:</strong> <span id="review-subject">No especificado</span></p>
+                                                <p><strong>Descripción:</strong> <span id="review-description">No proporcionada</span></p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><strong>Canal de Recepción:</strong> <span id="review-channel">No seleccionado</span></p>
+                                                <p><strong>Dependencia sugerida:</strong> <span id="review-department">No especificada</span></p>
+                                                <p><strong>Archivos adjuntos:</strong> <span id="review-attachments">0</span></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card">
+                                    <div class="card-header bg-light">
+                                        <h5 class="mb-0">Información del Peticionario</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <p><strong>Nombre:</strong> <span id="review-name">No proporcionado</span></p>
+                                                <p><strong>Tipo de Identificación:</strong> <span id="review-idType">No seleccionado</span></p>
+                                                <p><strong>Número de Identificación:</strong> <span id="review-idNumber">No proporcionado</span></p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><strong>Correo Electrónico:</strong> <span id="review-email">No proporcionado</span></p>
+                                                <p><strong>Teléfono:</strong> <span id="review-phone">No proporcionado</span></p>
+                                                <p><strong>Dirección:</strong> <span id="review-address">No proporcionada</span></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-check mt-4">
+                                    <input class="form-check-input" type="checkbox" id="termsAccept" required>
+                                    <label class="form-check-label" for="termsAccept">
+                                        Acepto los términos y condiciones y autorizo el tratamiento de mis datos personales de acuerdo con la Ley 1581 de 2012.
+                                    </label>
+                                </div>
+                                
+                                <div class="form-navigation mt-4">
+                                    <button type="button" class="btn btn-outline-secondary prev-btn">Anterior</button>
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="fas fa-paper-plane me-1"></i> Enviar PQRSD
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="mt-4 text-center">
+                    <p class="text-muted">Al registrar su PQRSD, recibirá un número de radicado para hacer seguimiento a su solicitud.</p>
+                    <p class="text-muted">Para consultas o asistencia, contacte a nuestro equipo de soporte.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Variables for form navigation
+            const formSections = document.querySelectorAll('.form-section');
+            const steps = document.querySelectorAll('.step');
+            let currentSection = 0;
+            
+            // Channel selection
+            const channelOptions = document.querySelectorAll('.channel-option');
+            channelOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    channelOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    document.getElementById('pqrsdType').value = this.getAttribute('data-type');
+                });
+            });
+            
+            // Character count for description
+            const descriptionTextarea = document.getElementById('description');
+            const characterCount = document.querySelector('.character-count');
+            
+            descriptionTextarea.addEventListener('input', function() {
+                const count = this.value.length;
+                characterCount.textContent = `${count}/2000 caracteres`;
+                
+                if (count > 2000) {
+                    characterCount.classList.add('text-danger');
+                } else {
+                    characterCount.classList.remove('text-danger');
+                }
+            });
+            
+            // Navigation functions
+            function showSection(index) {
+                formSections.forEach(section => section.classList.remove('active'));
+                steps.forEach(step => step.classList.remove('active', 'completed'));
+                
+                formSections[index].classList.add('active');
+                
+                for (let i = 0; i <= index; i++) {
+                    if (i < index) {
+                        steps[i].classList.add('completed');
+                    } else {
+                        steps[i].classList.add('active');
+                    }
+                }
+                
+                currentSection = index;
+            }
+            
+            // Next button click
+            document.querySelectorAll('.next-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    // Validate current section before proceeding
+                    if (validateSection(currentSection)) {
+                        if (currentSection < formSections.length - 1) {
+                            updateReviewSection();
+                            showSection(currentSection + 1);
+                        }
+                    }
+                });
+            });
+            
+            // Previous button click
+            document.querySelectorAll('.prev-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    if (currentSection > 0) {
+                        showSection(currentSection - 1);
+                    }
+                });
+            });
+            
+            // Form submission
+            document.getElementById('pqrsdForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                if (validateSection(3)) {
+                    // Simulate form submission
+                    const submitBtn = this.querySelector('button[type="submit"]');
+                    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Enviando...';
+                    submitBtn.disabled = true;
+                    
+                    setTimeout(function() {
+                        alert('¡Su PQRSD ha sido registrada exitosamente! Pronto recibirá un correo con el número de radicado.');
+                        // Here you would typically reset the form or redirect
+                    }, 2000);
+                }
+            });
+            
+            // Validate current section
+            function validateSection(sectionIndex) {
+                const currentSection = formSections[sectionIndex];
+                const requiredFields = currentSection.querySelectorAll('[required]');
+                let isValid = true;
+                
+                requiredFields.forEach(field => {
+                    if (!field.value.trim()) {
+                        isValid = false;
+                        field.classList.add('is-invalid');
+                        
+                        // Add error message if not exists
+                        if (!field.nextElementSibling || !field.nextElementSibling.classList.contains('invalid-feedback')) {
+                            const errorDiv = document.createElement('div');
+                            errorDiv.className = 'invalid-feedback';
+                            errorDiv.textContent = 'Este campo es obligatorio';
+                            field.parentNode.appendChild(errorDiv);
+                        }
+                    } else {
+                        field.classList.remove('is-invalid');
+                        
+                        // Remove error message if exists
+                        if (field.nextElementSibling && field.nextElementSibling.classList.contains('invalid-feedback')) {
+                            field.parentNode.removeChild(field.nextElementSibling);
+                        }
+                    }
+                });
+                
+                // Special validation for step 1
+                if (sectionIndex === 0 && !document.getElementById('pqrsdType').value) {
+                    isValid = false;
+                    alert('Por favor seleccione el tipo de PQRSD');
+                }
+                
+                return isValid;
+            }
+            
+            // Update review section with form data
+            function updateReviewSection() {
+                // PQRSD details
+                const selectedType = document.querySelector('.channel-option.selected');
+                document.getElementById('review-type').textContent = selectedType ? selectedType.querySelector('h5').textContent : 'No seleccionado';
+                document.getElementById('review-subject').textContent = document.getElementById('subject').value || 'No especificado';
+                document.getElementById('review-description').textContent = document.getElementById('description').value || 'No proporcionada';
+                
+                // Reception channel
+                const selectedChannel = document.querySelector('input[name="receptionChannel"]:checked');
+                document.getElementById('review-channel').textContent = selectedChannel ? selectedChannel.nextElementSibling.textContent.trim() : 'No seleccionado';
+                
+                // Department
+                const departmentSelect = document.getElementById('department');
+                document.getElementById('review-department').textContent = departmentSelect.value ? departmentSelect.options[departmentSelect.selectedIndex].text : 'No especificada';
+                
+                // Attachments
+                const attachments = document.getElementById('attachments');
+                document.getElementById('review-attachments').textContent = attachments.files.length;
+                
+                // Personal information
+                document.getElementById('review-name').textContent = 
+                    (document.getElementById('firstName').value + ' ' + document.getElementById('lastName').value).trim() || 'No proporcionado';
+                
+                const idTypeSelect = document.getElementById('idType');
+                document.getElementById('review-idType').textContent = idTypeSelect.value ? idTypeSelect.options[idTypeSelect.selectedIndex].text : 'No seleccionado';
+                
+                document.getElementById('review-idNumber').textContent = document.getElementById('idNumber').value || 'No proporcionado';
+                document.getElementById('review-email').textContent = document.getElementById('email').value || 'No proporcionado';
+                document.getElementById('review-phone').textContent = document.getElementById('phone').value || 'No proporcionado';
+                document.getElementById('review-address').textContent = document.getElementById('address').value || 'No proporcionada';
+            }
+        });
+    </script>
+</body>
+</html>

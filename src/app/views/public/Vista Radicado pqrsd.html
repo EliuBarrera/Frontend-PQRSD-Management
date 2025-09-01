@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seguimiento de PQRSD - Sistema de Gestión</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-yellow: #f39200;
+            --primary-blue: #1e2b39;
+            --light-gray: #f8f9fa;
+            --dark-gray: #343a40;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+        }
+        
+        .navbar {
+            background-color: var(--primary-blue);
+        }
+        
+        .navbar-brand, .nav-link {
+            color: white !important;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-yellow);
+            border-color: var(--primary-yellow);
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+        
+        .btn-primary:hover {
+            background-color: #e08400;
+            border-color: #e08400;
+            color: var(--primary-blue);
+        }
+        
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .card-header {
+            background-color: var(--primary-blue);
+            color: white;
+            border-radius: 10px 10px 0 0 !important;
+        }
+        
+        .badge-pqrsd-peticion {
+            background-color: #4bc0c0;
+        }
+        
+        .badge-pqrsd-queja {
+            background-color: #ffcd56;
+            color: var(--dark-gray);
+        }
+        
+        .badge-pqrsd-reclamo {
+            background-color: #ff6384;
+        }
+        
+        .badge-pqrsd-solicitud {
+            background-color: #36a2eb;
+        }
+        
+        .badge-pqrsd-denuncia {
+            background-color: #9966ff;
+        }
+        
+        .badge-status-pendiente {
+            background-color: #ffc107;
+            color: var(--dark-gray);
+        }
+        
+        .badge-status-proceso {
+            background-color: #17a2b8;
+        }
+        
+        .badge-status-resuelta {
+            background-color: #28a745;
+        }
+        
+        .badge-status-vencida {
+            background-color: #dc3545;
+        }
+        
+        .status-timeline {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin: 30px 0;
+        }
+        
+        .status-timeline::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background-color: #dee2e6;
+            z-index: 1;
+        }
+        
+        .status-step {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            flex: 1;
+        }
+        
+        .status-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background-color: #dee2e6;
+            color: #6c757d;
+            margin: 0 auto 10px;
+            font-size: 1.1rem;
+        }
+        
+        .status-step.active .status-icon {
+            background-color: var(--primary-yellow);
+            color: white;
+        }
+        
+        .status-step.completed .status-icon {
+            background-color: var(--primary-blue);
+            color: white;
+        }
+        
+        .status-label {
+            font-size: 0.85rem;
+            color: #6c757d;
+            font-weight: 500;
+        }
+        
+        .status-step.active .status-label {
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+        
+        .status-step.completed .status-label {
+            color: var(--primary-blue);
+        }
+        
+        .detail-section {
+            margin-bottom: 25px;
+        }
+        
+        .detail-section h5 {
+            color: var(--primary-blue);
+            border-bottom: 2px solid var(--primary-yellow);
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .detail-item {
+            margin-bottom: 10px;
+            display: flex;
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            min-width: 180px;
+            color: var(--dark-gray);
+        }
+        
+        .detail-value {
+            flex: 1;
+        }
+        
+        .history-item {
+            border-left: 3px solid var(--primary-yellow);
+            padding-left: 15px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .history-item::before {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 5px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background-color: var(--primary-yellow);
+            border: 2px solid white;
+        }
+        
+        .history-date {
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+        
+        .contact-support {
+            background-color: #e9f7fe;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        .search-box {
+            background-color: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+        }
+        
+        .info-section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: rgba(243, 146, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            color: var(--primary-yellow);
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-comments me-2"></i>
+                Sistema PQRSD - IdeaPro
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="#"><i class="fas fa-home me-1"></i> Inicio</a>
+                <a class="nav-link" href="#"><i class="fas fa-plus-circle me-1"></i> Nueva PQRSD</a>
+                <a class="nav-link active" href="#"><i class="fas fa-search me-1"></i> Seguimiento</a>
+                <a class="nav-link" href="#"><i class="fas fa-question-circle me-1"></i> Ayuda</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="text-center mb-5">
+                    <h1 class="h2 mb-3">Seguimiento de PQRSD</h1>
+                    <p class="lead">Consulte el estado de sus peticiones, quejas, reclamos, solicitudes y denuncias</p>
+                </div>
+                
+                <!-- Información importante -->
+                <div class="info-section mb-5">
+                    <div class="row">
+                        <div class="col-md-4 text-center mb-4">
+                            <div class="feature-icon">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <h5>Consulta Rápida</h5>
+                            <p class="text-muted">Solo necesita su número de radicado y documento de identidad</p>
+                        </div>
+                        <div class="col-md-4 text-center mb-4">
+                            <div class="feature-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <h5>Estado en Tiempo Real</h5>
+                            <p class="text-muted">Vea el estado actual de su trámite y el tiempo restante</p>
+                        </div>
+                        <div class="col-md-4 text-center mb-4">
+                            <div class="feature-icon">
+                                <i class="fas fa-history"></i>
+                            </div>
+                            <h5>Historial Completo</h5>
+                            <p class="text-muted">Acceda al historial completo de movimientos de su PQRSD</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Search Box -->
+                <div class="search-box mb-5">
+                    <h4 class="mb-4">Consultar Estado de PQRSD</h4>
+                    <form id="trackingForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="radicadoNumber" class="form-label">Número de Radicado</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">PQ-</span>
+                                    <input type="text" class="form-control" id="radicadoNumber" placeholder="Ej: 0842" required>
+                                </div>
+                                <div class="form-text">Ingrese el número que recibió al radicar su PQRSD</div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="idNumber" class="form-label">Número de Identificación</label>
+                                <input type="text" class="form-control" id="idNumber" placeholder="Su número de identificación" required>
+                                <div class="form-text">Ingrese el número de identificación con el que radicó</div>
+                            </div>
+                        </div>
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-search me-2"></i> Consultar Estado
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Results Section (initially hidden) -->
+                <div id="resultsSection" style="display: none;">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3 class="mb-0">Estado de su PQRSD</h3>
+                        <button class="btn btn-outline-secondary" id="backToSearch">
+                            <i class="fas fa-arrow-left me-1"></i> Nueva Búsqueda
+                        </button>
+                    </div>
+                    
+                    <!-- PQRSD Status Card -->
+                    <div class="card mb-4">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h4 class="mb-0">PQ-0842 - Solicitud de información sobre proyectos de infraestructura</h4>
+                            <span class="badge badge-pqrsd-peticion">Petición</span>
+                        </div>
+                        <div class="card-body">
+                            <!-- Status Timeline -->
+                            <div class="status-timeline">
+                                <div class="status-step completed">
+                                    <div class="status-icon">
+                                        <i class="fas fa-file-alt"></i>
+                                    </div>
+                                    <div class="status-label">Radicada</div>
+                                </div>
+                                <div class="status-step completed">
+                                    <div class="status-icon">
+                                        <i class="fas fa-cogs"></i>
+                                    </div>
+                                    <div class="status-label">En Revisión</div>
+                                </div>
+                                <div class="status-step active">
+                                    <div class="status-icon">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div class="status-label">En Proceso</div>
+                                </div>
+                                <div class="status-step">
+                                    <div class="status-icon">
+                                        <i class="fas fa-check-circle"></i>
+                                    </div>
+                                    <div class="status-label">Resuelta</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Current Status Alert -->
+                            <div class="alert alert-info">
+                                <div class="d-flex">
+                                    <div class="me-3">
+                                        <i class="fas fa-info-circle fa-2x"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="alert-heading">Su PQRSD está en proceso</h5>
+                                        <p class="mb-0">Su solicitud está siendo atendida por la dependencia correspondiente. El plazo estimado de respuesta vence el <strong>25/08/2023</strong>.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Details Grid -->
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="detail-section">
+                                        <h5>Información de Radicación</h5>
+                                        <div class="detail-item">
+                                            <span class="detail-label">Número de Radicado:</span>
+                                            <span class="detail-value">PQ-0842</span>
+                                        </div>
+                                        <div class="detail-item">
+                                            <span class="detail-label">Fecha de Radicación:</span>
+                                            <span class="detail-value">15/08/2023 10:23 AM</span>
+                                        </div>
+                                        <div class="detail-item">
+                                            <span class="detail-label">Plazo de Respuesta:</span>
+                                            <span class="detail-value">25/08/2023</span>
+                                        </div>
+                                        <div class="detail-item">
+                                            <span class="detail-label">Canal de Recepción:</span>
+                                            <span class="detail-value">Página Web</span>
+                                        </div>
+                                        <div class="detail-item">
+                                            <span class="detail-label">Tiempo Transcurrido:</span>
+                                            <span class="detail-value">5 de 10 días hábiles</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="detail-section">
+                                        <h5>Información de Trámite</h5>
+                                        <div class="detail-item">
+                                            <span class="detail-label">Dependencia Responsable:</span>
+                                            <span class="detail-value">Secretaría de Gobierno</span>
+                                        </div>
+                                        <div class="detail-item">
+                                            <span class="detail-label">Funcionario Asignado:</span>
+                                            <span class="detail-value">Juan Pérez</span>
+                                        </div>
+                                        <div class="detail-item">
+                                            <span class="detail-label">Última Actualización:</span>
+                                            <span class="detail-value">20/08/2023 03:20 PM</span>
+                                        </div>
+                                        <div class="detail-item">
+                                            <span class="detail-label">Estado Actual:</span>
+                                            <span class="detail-value"><span class="badge badge-status-proceso">En Proceso</span></span>
+                                        </div>
+                                        <div class="detail-item">
+                                            <span class="detail-label">Prioridad:</span>
+                                            <span class="detail-value"><span class="badge bg-danger">Alta</span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- History Timeline -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h4 class="mb-0">Historial de Actualizaciones</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="history-item">
+                                <div class="d-flex justify-content-between">
+                                    <h6>PQRSD Radicada</h6>
+                                    <span class="history-date">15/08/2023 10:23 AM</span>
+                                </div>
+                                <p class="mb-0">Su PQRSD ha sido radicada exitosamente con el número PQ-0842. Se ha enviado un correo de confirmación a su dirección electrónica.</p>
+                            </div>
+                            
+                            <div class="history-item">
+                                <div class="d-flex justify-content-between">
+                                    <h6>Asignación Inicial</h6>
+                                    <span class="history-date">16/08/2023 09:15 AM</span>
+                                </div>
+                                <p class="mb-0">Su solicitud ha sido asignada a la Secretaría de Gobierno para su revisión y trámite.</p>
+                            </div>
+                            
+                            <div class="history-item">
+                                <div class="d-flex justify-content-between">
+                                    <h6>Cambio de Estado</h6>
+                                    <span class="history-date">16/08/2023 11:40 AM</span>
+                                </div>
+                                <p class="mb-0">El estado de su PQRSD ha cambiado a "En proceso". Su solicitud está siendo revisada por el funcionario asignado.</p>
+                            </div>
+                            
+                            <div class="history-item">
+                                <div class="d-flex justify-content-between">
+                                    <h6>Solicitud de Información Adicional</h6>
+                                    <span class="history-date">20/08/2023 03:20 PM</span>
+                                </div>
+                                <p class="mb-0">Para dar respuesta completa a su solicitud, se ha requerido información adicional a otras dependencias. Esto puede extender el tiempo de respuesta.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Response Section -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h4 class="mb-0">Respuesta a su PQRSD</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="alert alert-warning">
+                                <div class="d-flex">
+                                    <div class="me-3">
+                                        <i class="fas fa-clock fa-2x"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="alert-heading">Su PQRSD aún está en proceso</h5>
+                                        <p class="mb-0">Una vez que su solicitud sea resuelta, encontrará aquí la respuesta oficial y los detalles de la solución.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="text-center py-4">
+                                <i class="fas fa-envelope-open-text fa-3x text-muted mb-3"></i>
+                                <h5>Respuesta no disponible aún</h5>
+                                <p class="text-muted">Cuando su PQRSD sea resuelta, podrá ver la respuesta en esta sección.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Contact Support -->
+                    <div class="contact-support">
+                        <h4 class="mb-3">¿Necesita ayuda adicional?</h4>
+                        <p>Si tiene preguntas sobre el estado de su PQRSD o requiere información adicional, puede contactarnos a través de los siguientes canales:</p>
+                        
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <div class="d-flex mb-3">
+                                    <div class="me-3">
+                                        <i class="fas fa-envelope fa-2x text-primary"></i>
+                                    </div>
+                                    <div>
+                                        <h6>Correo Electrónico</h6>
+                                        <p class="mb-0">pqrsd@suentidad.gov.co</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex mb-3">
+                                    <div class="me-3">
+                                        <i class="fas fa-phone fa-2x text-primary"></i>
+                                    </div>
+                                    <div>
+                                        <h6>Línea de Atención</h6>
+                                        <p class="mb-0">(601) 123 4567</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex mb-3">
+                                    <div class="me-3">
+                                        <i class="fab fa-whatsapp fa-2x text-success"></i>
+                                    </div>
+                                    <div>
+                                        <h6>WhatsApp</h6>
+                                        <p class="mb-0">+57 300 123 4567</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex mb-3">
+                                    <div class="me-3">
+                                        <i class="fas fa-clock fa-2x text-primary"></i>
+                                    </div>
+                                    <div>
+                                        <h6>Horario de Atención</h6>
+                                        <p class="mb-0">Lunes a Viernes: 8:00 AM - 5:00 PM</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <p class="mb-0"><strong>Nota:</strong> Al contactarnos, por favor tenga a mano su número de radicado (PQ-0842) para agilizar la atención.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Información adicional -->
+                <div class="info-section mt-5">
+                    <h4 class="mb-4">Preguntas Frecuentes</h4>
+                    
+                    <div class="accordion" id="faqAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                    ¿Qué información necesito para consultar mi PQRSD?
+                                </button>
+                            </h2>
+                            <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Solo necesita su número de radicado (que recibió al momento de registrar su PQRSD) y su número de identificación con el que realizó el trámite.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                    ¿Qué hago si perdí mi número de radicado?
+                                </button>
+                            </h2>
+                            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Puede contactarnos a través de los canales de atención indicados más arriba. Deberá proporcionar su número de identificación, la fecha aproximada de radicación y los detalles de su solicitud para que podamos localizar su PQRSD.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                    ¿Cuánto tiempo tarda la respuesta a mi PQRSD?
+                                </button>
+                            </h2>
+                            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Los tiempos de respuesta varían según el tipo de PQRSD. Las peticiones generales tienen un plazo de 15 días hábiles, las solicitudes de información 10 días hábiles, y las consultas técnicas 30 días hábiles. Estos plazos están establecidos por la Ley 1755 de 2015.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Sistema de Gestión de PQRSD</h5>
+                    <p class="mb-0">Entidad Ejemplo - Todos los derechos reservados &copy; 2023</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0">
+                        <a href="#" class="text-white me-3">Términos y Condiciones</a>
+                        <a href="#" class="text-white me-3">Política de Privacidad</a>
+                        <a href="#" class="text-white">Contáctenos</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Form submission
+            document.getElementById('trackingForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Get form values
+                const radicado = document.getElementById('radicadoNumber').value;
+                const idNumber = document.getElementById('idNumber').value;
+                
+                // Simple validation
+                if (!radicado || !idNumber) {
+                    alert('Por favor complete todos los campos');
+                    return;
+                }
+                
+                // In a real application, this would validate against a backend
+                // For demo purposes, we'll just show the results
+                document.getElementById('resultsSection').style.display = 'block';
+                
+                // Scroll to results
+                document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // Back to search button
+            document.getElementById('backToSearch').addEventListener('click', function() {
+                document.getElementById('resultsSection').style.display = 'none';
+                document.getElementById('trackingForm').reset();
+                
+                // Scroll to search form
+                document.getElementById('trackingForm').scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // Example PQRSD numbers for quick testing
+            const exampleNumbers = ['0842', '0738', '0915', '1023'];
+            
+            // Fill random example on load for demo purposes
+            document.getElementById('radicadoNumber').value = exampleNumbers[Math.floor(Math.random() * exampleNumbers.length)];
+            document.getElementById('idNumber').value = '12345678';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IDEAPRO - Sistema de Acceso</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        header {
+            background: linear-gradient(to right, #1a2a6c, #2c3e50);
+            color: white;
+            text-align: center;
+            padding: 25px;
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+        
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+        
+        .card {
+            width: 280px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card-header {
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .admin .card-header {
+            background: linear-gradient(to right, #e44d26, #f16529);
+        }
+        
+        .funcionario .card-header {
+            background: linear-gradient(to right, #1a2a6c, #2c3e50);
+        }
+        
+        .pqrsd .card-header {
+            background: linear-gradient(to right, #136a8a, #267871);
+        }
+        
+        .card-body {
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+        
+        .admin .icon {
+            color: #e44d26;
+        }
+        
+        .funcionario .icon {
+            color: #1a2a6c;
+        }
+        
+        .pqrsd .icon {
+            color: #136a8a;
+        }
+        
+        .card-body p {
+            color: #555;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: #2c3e50;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: background 0.3s, transform 0.2s;
+        }
+        
+        .btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .admin .btn {
+            background: #e44d26;
+        }
+        
+        .funcionario .btn {
+            background: #1a2a6c;
+        }
+        
+        .pqrsd .btn {
+            background: #136a8a;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #f5f5f5;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .card {
+                width: 90%;
+                max-width: 350px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>IDEAPRO</h1>
+            <p>Sistema Integral de Gestión</p>
+        </header>
+        
+        <div class="content">
+            <div class="card admin">
+                <div class="card-header">
+                    ADMINISTRADOR
+                </div>
+                <div class="card-body">
+                    <div class="icon">👨‍💼</div>
+                    <p>Acceso al panel de administración del sistema con funcionalidades completas de gestión y configuración.</p>
+                    <a href="#" class="btn">Ingresar</a>
+                </div>
+            </div>
+            
+            <div class="card funcionario">
+                <div class="card-header">
+                    FUNCIONARIO
+                </div>
+                <div class="card-body">
+                    <div class="icon">👨‍💻</div>
+                    <p>Acceso al panel de funcionario para gestionar trámites, consultas y atención al usuario.</p>
+                    <a href="#" class="btn">Ingresar</a>
+                </div>
+            </div>
+            
+            <div class="card pqrsd">
+                <div class="card-header">
+                    REGISTRAR PQRSD
+                </div>
+                <div class="card-body">
+                    <div class="icon">📝</div>
+                    <p>Registrar Peticiones, Quejas, Reclamos, Sugerencias y Denuncias para seguimiento y resolución.</p>
+                    <a href="#" class="btn">Registrar</a>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>IDEAPRO - Sistema de Gestión © 2023 | Todos los derechos reservados</p>
+        </footer>
+    </div>
+</body>
+</html>
