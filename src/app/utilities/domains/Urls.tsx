@@ -56,14 +56,14 @@ export const URLS = {
     DEPENDENCIA_VERIFICAR_EXISTENCIA: "/api/dependency/verify/:nombreDependencia",
 
     /* Peticiones para funcionario */
-    FUNCIONARIO_LISTAR: "/api/publicServant/all",
-    FUNCIONARIO_CREAR: "/api/publicServant/add",
-    FUNCIONARIO_ACTUALIZAR: "/api/publicServant/update",
-    FUNCIONARIO_ELIMINAR: "/api/publicServant/delete/:idFuncionario",
-    FUNCIONARIO_BUSCAR_ID: "/api/publicServant/search/:idFuncionario",
-    FUNCIONARIO_BUSCAR_NOMBRE: "/api/publicServant/searchName/:nombreFuncionario",
-    FUNCIONARIO_BUSCAR_DEPENDENCIA: "/api/publicServant/searchDependency/:idDependencia",
-    FUNCIONARIO_BUSCAR_IDENTIFICACION: "/api/publicServant/searchIdentification/:identificacion",
+    FUNCIONARIO_LISTAR: "/api/functionary/all",
+    FUNCIONARIO_CREAR: "/api/functionary/add",
+    FUNCIONARIO_ACTUALIZAR: "/api/functionary/update",
+    FUNCIONARIO_ELIMINAR: "/api/functionary/delete/:idFuncionario",
+    FUNCIONARIO_BUSCAR_ID: "/api/functionary/search/:idFuncionario",
+    FUNCIONARIO_BUSCAR_NOMBRE: "/api/functionary/searchName/:nombreFuncionario",
+    FUNCIONARIO_BUSCAR_DEPENDENCIA: "/api/functionary/searchDependency/:idDependencia",
+    FUNCIONARIO_BUSCAR_IDENTIFICACION: "/api/functionary/searchIdentification/:identificacion",
 
     /* Peticiones para estado PQRSD */
     ESTADO_PQRSD_LISTAR: "/api/statePQRSD/all",
@@ -113,10 +113,10 @@ export const URLS = {
     ALERTA_MARCAR_LEIDA: "/api/alerta/markRead/:idAlerta",
 
     /* Peticiones para administradores */
-    ADMINISTRADOR_LISTAR: "/api/administrator/all",
-    ADMINISTRADOR_CREAR: "/api/administrator/add",
-    ADMINISTRADOR_ACTUALIZAR: "/api/administrator/update",
-    ADMINISTRADOR_ELIMINAR: "/api/administrator/delete/:idAdministrador",
-    ADMINISTRADOR_BUSCAR_ID: "/api/administrator/search/:idAdministrador",
-    ADMINISTRADOR_BUSCAR_NOMBRE: "/api/administrator/searchName/:nombreAdministrador"
+    ADMINISTRADOR_LISTAR: "/api/admin/all",
+    ADMINISTRADOR_CREAR: "/api/admin/add",
+    ADMINISTRADOR_ACTUALIZAR: "/api/admin/update",
+    ADMINISTRADOR_ELIMINAR: "/api/admin/delete/:idAdministrador",
+    ADMINISTRADOR_BUSCAR_ID: "/api/admin/search/:idAdministrador",
+    ADMINISTRADOR_BUSCAR_NOMBRE: "/api/admin/searchName/:nombreAdministrador"
 };

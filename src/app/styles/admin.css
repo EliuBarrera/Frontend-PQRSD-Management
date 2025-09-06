@@ -1,0 +1,51 @@
+/* === ADMIN DASHBOARD === */
+
+/* Layout principal */
+.container-fluid {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  flex: 1;
+}
+
+/* Sidebar */
+.sidebar {
+  background: linear-gradient(135deg, #1e2b39, #0f172a);
+  color: #fff;
+  min-height: 100vh;
+  padding: 20px 10px;
+}
+
+.sidebar .nav-link {
+  color: rgba(255, 255, 255, 0.8);
+  padding: 12px 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 8px;
+  transition: background 0.3s;
+}
+
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active {
+  background: rgba(243, 146, 0, 0.2);
+  color: #f39200;
+}
+
+/* Main content */
+.main-content {
+  background: #f8fafc;
+  padding: 30px;
+  min-height: 100vh;
+}
+
+/* Footer */
+.footer {
+  background: #1e2b39;
+  color: white;
+  padding: 15px 30px;
+  text-align: center;
+}

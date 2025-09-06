@@ -1,0 +1,84 @@
+/* Contenedor principal */
+.notfound-container {
+  background: linear-gradient(135deg, #1e2b39, #0f172a);
+  color: #fff;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* Caja central */
+.notfound-content {
+  text-align: center;
+  max-width: 600px;
+  padding: 40px 20px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
+  animation: fadeIn 1s ease-in-out;
+}
+
+/* Número grande */
+.notfound-title {
+  font-size: 8rem;
+  font-weight: 900;
+  color: #f39200;
+  margin-bottom: 20px;
+  animation: bounce 2s infinite;
+}
+
+/* Subtítulo */
+.notfound-subtitle {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Texto descriptivo */
+.notfound-text {
+  font-size: 1.1rem;
+  color: #e2e8f0;
+  margin-bottom: 30px;
+}
+
+/* Botón */
+.notfound-btn {
+  display: inline-block;
+  padding: 14px 28px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  background: #f39200;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: all 0.3s ease-in-out;
+}
+
+.notfound-btn:hover {
+  background: #d17c00;
+  transform: scale(1.05);
+}
+
+/* Animaciones */
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

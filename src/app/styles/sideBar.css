@@ -1,0 +1,144 @@
+/* === BARRA LATERAL === */
+aside {
+  width: 250px;
+  height: 100vh;
+  background-color: #1e2b39;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease-in-out;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+}
+
+/* Estado oculto */
+.sidebar-none {
+  transform: translateX(-100%);
+}
+
+.sidebar {
+  transform: translateX(0);
+}
+
+.sidebar-base {
+  box-shadow: 4px 0 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Header */
+.sidebar-header {
+  padding: 16px;
+  background-color: #152231;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sidebar-header .navbar-brand {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #fff;
+}
+
+.sidebar-header img {
+  margin-right: 8px;
+}
+
+.logo-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+  color: #f8f9fa;
+}
+
+.sidebar-toggle {
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.sidebar-toggle:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Body */
+.sidebar-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+  border-color: 1px solid red;
+}
+
+
+.sidebar-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-list .nav-item {
+  margin-bottom: 8px;
+}
+
+.sidebar-list .nav-link {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 6px;
+  text-decoration: none;
+  color: #cbd5e1;
+  transition: background 0.2s, color 0.2s;
+}
+
+.sidebar-list .nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.sidebar-list .nav-link i,
+.sidebar-list .nav-link svg {
+  margin-right: 10px;
+  font-size: 1.1rem;
+}
+
+/* Footer */
+.sidebar-footer {
+  padding: 12px;
+  background-color: #152231;
+  font-size: 0.85rem;
+  text-align: center;
+  color: #9ca3af;
+}
+
+/* Mini sidebar */
+.sidebar-mini {
+  width: 80px;
+}
+
+.sidebar-mini .logo-title {
+  display: none;
+}
+
+.sidebar-mini .nav-link span {
+  display: none;
+}
+
+.sidebar-mini .nav-link {
+  justify-content: center;
+}
+
+.sidebar-mini .nav-link i,
+.sidebar-mini .nav-link svg {
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  aside {
+    position: fixed;
+    z-index: 2000;  
+  }
+}

@@ -24,7 +24,12 @@ npm install lucide-react
 npm i react-datepicker
 
 npm install --save-dev @types/testing-library__react
+npm install react-toastify
+npm install @reduxjs/toolkit react-redux
 
+npm install aria-query --save-dev
+npm install @fortawesome/fontawesome-free
+npm install smooth-scrollbar
 
 //*********************************************************************
 2.  estrcutura de Proyecto
