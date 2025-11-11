@@ -1,29 +1,17 @@
-import React, { Suspense, useEffect } from 'react';
-import './App.css';
-import { BrowserRouter } from 'react-router-dom';
-import { RuteoPrincipal } from './app/routes/RuteoPrincipal';
-import { ToastContainer } from 'react-toastify';
-//import LoginPage from './app/login/LoginPage';
-
-const inicioComponente = () => {
-  return (
-    <div id="loading" >
-      <div id="loading-center"></div>
-    </div>
-  )
-}
+import { Suspense } from "react";
+import { BrowserRouter } from "react-router-dom";
+import { RuteoPrincipal } from "./app/routes/RuteoPrincipal";
 
 function App() {
   return (
-    
-    <div className='App min-h-screen'>
-      <ToastContainer />
-      <BrowserRouter >
-        <Suspense fallback={inicioComponente()}>
-          <RuteoPrincipal/>
+    <div className="min-h-screen text-gray-100">
+      <BrowserRouter>
+        <Suspense fallback={<p className="text-center p-8">Cargando...</p>}>
+          <RuteoPrincipal />
         </Suspense>
       </BrowserRouter>
     </div>
   );
 }
+
 export default App;

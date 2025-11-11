@@ -32,7 +32,7 @@ class SliderTab {
     this.slider.style.padding = '0px';
     this.slider.style.width = this.element.querySelector('.nav-item:nth-child(1)').offsetWidth + 'px';
     this.slider.style.transform = 'translate3d(0px, 0px, 0px)';
-    this.slider.style.transition = '300ms ease-in-out';
+    this.slider.style.transition = '100ms ease-in-out';
   }
 
   mouseOver() {

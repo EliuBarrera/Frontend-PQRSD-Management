@@ -62,6 +62,33 @@ export class PQRSD {
         this.justificacionReclasificacion = justificacionReclasificacion;
         //this.archivosAdjuntosPQRSD = archivosAdjuntosPQRSD;
     }
+
+      // Método para calcular fecha de vencimiento
+  public calcularFechaVencimiento(plazo_dias: number): void {
+    const fecha = new Date(this.fechaRadicacion);
+    fecha.setDate(fecha.getDate() + plazo_dias);
+    this.fechaVencimiento = fecha;
+  }
+
+  // Método para generar número de oficio
+  public generarNumeroOficio(): string {
+    const year = this.fechaRadicacion.getFullYear();
+    const consecutivo = String(this.idPQRSD).padStart(4, '0');
+    this.numeroOficio = `PQRSD-${year}-${consecutivo}`;
+    return this.numeroOficio;
+  }
+
+  // Método para verificar si está vencida
+  public estaVencida(): boolean {
+    return new Date() > this.fechaVencimiento && !this.fechaRespuesta;
+  }
+
+  // Método para obtener días restantes
+  public diasRestantes(): number {
+    const hoy = new Date();
+    const diferencia = this.fechaVencimiento.getTime() - hoy.getTime();
+    return Math.ceil(diferencia / (1000 * 3600 * 24));
+  }
 }
 
 export default PQRSD;

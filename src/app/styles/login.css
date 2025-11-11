@@ -18,6 +18,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top:-180px ;
 }
 
 .login-title {
@@ -76,12 +77,12 @@
 /* Responsive */
 @media (max-width: 768px) {
   .main-container {
-    margin-top: 60px;
+    margin-top: 140px;
     padding: 10px;
   }
 
   .login-container {
-    margin: 20px auto;
+    margin-top: 20px auto;
     padding: 20px 10px;
   }
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import Header from "./Header";
-import { BarraLateral } from "./BarraLateral";
+import { BarraLateral } from "../../../components/contenedor/BarraLateral";
 import { FooterInt } from "./FooterInt";
 import "../../../styles/admin.css";
 import { useSelector } from "react-redux";

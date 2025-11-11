@@ -14,9 +14,6 @@ npm i react-paginate
 npm i @reduxjs/toolkit
 npm i @fortawesome/fontawesome-free
 
-
-npm i sass --save-dev
-npm i sass-loader --save-dev
 npm install @types/node@20 --save-dev
 npm install vite @vitejs/plugin-react --save-dev
 npm install lucide-react
@@ -30,6 +27,13 @@ npm install @reduxjs/toolkit react-redux
 npm install aria-query --save-dev
 npm install @fortawesome/fontawesome-free
 npm install smooth-scrollbar
+
+npm install vite @vitejs/plugin-react --save-dev
+npm install -D tailwindcss postcss autoprefixer
+npm install lodash
+
+npx shadcn@latest init
+npx shadcn@latest add button card input
 
 //*********************************************************************
 2.  estrcutura de Proyecto

@@ -13,8 +13,8 @@ export const Error = () => {
           No te preocupes, te ayudamos a volver.
         </p>
 
-        <Link to="/dash" className="notfound-btn">
-          Volver al Dashboard
+        <Link to="/" className="notfound-btn">
+          Volver al Inicio
         </Link>
       </div>
     </div>

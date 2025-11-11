@@ -6,15 +6,10 @@ import Header from "./Header";
 export const MainComponent: FC = () => {
     return (
         <main className="main-content">
-            {/*<div className="position-relative">
-                    <Header />
-                </div>
-                <div className="conatiner-fluid content-inner mt-n5 py-0">
-                   <RuteoInterno />
-                </div>
-                <FooterInt />*/}
             <Header />
-            <RuteoInterno />
+            <div className="container-fluid content-inner mt-5 py-0">
+                <RuteoInterno />
+            </div>
             <FooterInt />
         </main>
     )

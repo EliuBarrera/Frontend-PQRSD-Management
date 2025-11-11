@@ -1,5 +1,5 @@
 export const URLS = {
-    URL_BASE: "http://localhost:3000",
+    URL_BASE: "http://localhost:4000",
     
     /* Autenticación */
     INICIO_SESION: "/api/auth/login",
@@ -11,9 +11,9 @@ export const URLS = {
     USUARIO_ELIMINAR: "/api/user/delete/:idUsuario",
     USUARIO_BUSCAR_ID: "/api/user/search/:idUsuario",
     USUARIO_BUSCAR_NOMBRE: "/api/user/searchName/:nombreUsuario",
-    USUARIO_BUSCAR_IDENTIFICACION: "/api/user/searchIdentification/:identificacion",
+    USUARIO_BUSCAR_IDENTIFICACION: "/api/user/searchCedula/:identificacion",
     USUARIO_BUSCAR_TIPO: "/api/user/searchType/:tipo",
-    USUARIO_VERIFICAR_EXISTENCIA: "/api/user/verify/:identificacion",
+    USUARIO_VERIFICAR_EXISTENCIA: "/api/user/search/:identificacion",
 
     /* Peticiones para tipo PQRSD */
     TIPO_PQRSD_LISTAR: "/api/typePQRSD/all",
@@ -32,7 +32,8 @@ export const URLS = {
     PQRSD_ACTUALIZAR: "/api/PQRSD/update",
     PQRSD_ELIMINAR: "/api/PQRSD/delete/:idPQRSD",
     PQRSD_BUSCAR_ID: "/api/PQRSD/search/:idPQRSD",
-    PQRSD_BUSCAR_USUARIO: "/api/PQRSD/usuario/:idUsuario",
+    PQRSD_BUSCAR_IDENTIFICACION: "/api/PQRSD/searchCedula/:identificacion",
+    consultarPQRSDXCodigoPQRSD_BUSCAR_USUARIO: "/api/PQRSD/usuario/:idUsuario",
     PQRSD_BUSCAR_ESTADO: "/api/PQRSD/estado/:idEstado",
     PQRSD_BUSCAR_DEPENDENCIA: "/api/PQRSD/dependencia/:idDependencia",
     PQRSD_BUSCAR_TIPO: "/api/PQRSD/tipo/:idTipo",

@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
 
 interface CardProps {
-  type: "admin" | "funcionario" | "pqrsd";
+  type: 'admin' | 'pqrsd' | 'estado';
   title: string;
   icon: string;
   description: string;
@@ -10,13 +10,23 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({ type, title, icon, description, buttonText, link }) => {
+  const handleClick = () => {
+    window.location.href = link;
+  };
+
   return (
-    <div className={`card ${type}`}>
-      <div className="card-header">{title}</div>
+    <div className={`card ${type === 'admin' ? 'admin-funcionario' : type}`}>
+      <div className="card-header">
+        {title}
+      </div>
       <div className="card-body">
-        <div className="icon">{icon}</div>
+        <div className={type === 'admin' ? 'icon-container' : ''}>
+          <div className="icon">{icon}</div>
+        </div>
         <p>{description}</p>
-        <a href={link} className="btn">{buttonText}</a>
+        <button onClick={handleClick} className="btnEspecial">
+          {buttonText}
+        </button>
       </div>
     </div>
   );
